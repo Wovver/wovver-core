@@ -1,5 +1,5 @@
 {
-  "name": "backend-nest",
+  "name": "wovver-core",
   "version": "1.0.0",
   "description": "backend for Wovver",
   "main": "main.js",
@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Wovver/backend-nest.git"
+    "url": "git+https://github.com/Wovver/wovver-core.git"
   },
   "keywords": [
     "node"
@@ -18,9 +18,9 @@
   "author": "daveonhmd",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Wovver/backend-nest/issues"
+    "url": "https://github.com/Wovver/wovver-core/issues"
   },
-  "homepage": "https://github.com/Wovver/backend-nest#readme",
+  "homepage": "https://github.com/Wovver/wovver-core#readme",
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
     "@types/bcryptjs": "^2.4.6",
