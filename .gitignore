@@ -1,0 +1,14 @@
+# Ignore node modules
+node_modules/
+
+# Ignore environment files
+.env
+
+# macOS specific
+.DS_Store
+
+# Optional: Ignore dlist folder (if not necessary)
+dlist/
+
+# Optional: Ignore migrations folder (depending on your setup)
+migrations/
