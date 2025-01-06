@@ -2,10 +2,10 @@
   "name": "wovver-core",
   "version": "1.0.0",
   "description": "backend for Wovver",
-  "main": "main.js",
+  "main": "index.js",
   "scripts": {
-    "start": "node dist/main.js",
-    "dev": "nodemon src/main.ts",
+    "start": "node dist/index.js",
+    "dev": "nodemon src/index.ts",
     "build": "tsc"
   },
   "repository": {
@@ -31,12 +31,15 @@
     "tsconfig-paths": "^4.2.0"
   },
   "dependencies": {
+    "@destools/tocolor": "^1.0.1",
     "@types/node": "^22.10.2",
     "axios": "^1.7.9",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
+    "express-rate-limit": "^7.5.0",
+    "express-validator": "^7.2.1",
     "jsonwebtoken": "^9.0.2",
     "pg": "^8.13.1",
     "pg-hstore": "^2.3.4",

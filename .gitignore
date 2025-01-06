@@ -8,7 +8,10 @@ node_modules/
 .DS_Store
 
 # Optional: Ignore dlist folder (if not necessary)
-dlist/
+dist/
 
 # Optional: Ignore migrations folder (depending on your setup)
 migrations/
+
+
+todo

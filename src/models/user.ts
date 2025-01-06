@@ -1,6 +1,6 @@
 import { Model, DataTypes } from 'sequelize';
 import bcrypt from 'bcrypt';
-import sequelize from '../config/database'; // Adjust the import based on your project structure
+import sequelize from '../config/database';
 
 class User extends Model {
   public id!: number;
@@ -18,7 +18,6 @@ class User extends Model {
   }
 }
 
-// Initialize the model
 User.init({
   id: {
     type: DataTypes.INTEGER,
@@ -39,10 +38,10 @@ User.init({
     allowNull: false,
   },
 }, {
-  sequelize,  // Pass your sequelize instance here
+  sequelize,  
   modelName: 'User',
-  tableName: 'users',  // Ensure you're using the right table
-  timestamps: true,    // Automatically adds createdAt/updatedAt
+  tableName: 'users',
+  timestamps: true,
 });
 
 export default User;
