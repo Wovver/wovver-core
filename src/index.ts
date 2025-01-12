@@ -1,10 +1,31 @@
 import express from 'express';
+import cors, { CorsOptions } from 'cors';
 import sequelize from './config/database';
 import authRoutes from './routes/v1/auth';
 import postRoutes from './routes/v1/post';
-import { logInfo, logWarn, logError, logSuccess } from './utils/logger'; // Import specific functions
+import { logInfo, logWarn, logError, logSuccess } from './utils/logger';
+import User from './models/user';
+import Post from './models/post';
+import Like from './models/like';
 
 const app = express();
+
+const allowedOrigins = ['http://localhost:8081', 'http://localhost:3000', 'http://localhost:3050'];
+
+const corsOptions: CorsOptions = {
+  origin: (origin: string | undefined, callback: (err: Error | null, allow: boolean) => void) => {
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true); 
+    } else {
+      callback(new Error('Not allowed by CORS'), false); 
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+};
+
+app.use(cors(corsOptions));
+
 app.use(express.json());
 
 app.use((req, res, next) => {
@@ -12,35 +33,22 @@ app.use((req, res, next) => {
   next();
 });
 
-// 404 Error Handler with JSON Response
-app.use((req, res) => {
-  res.status(404).json({
-    status: 'error',
-    message: 'Not Found',
-    details: `The requested URL ${req.originalUrl} was not found on this server.`,
-  });
-});
-
-// 500 Error Handler with JSON Response
-interface ErrorRequestHandler {
-  (err: any, req: express.Request, res: express.Response, next: express.NextFunction): void;
-}
-
-const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
-  logError(err);
-  res.status(500).json({
-    status: 'error',
-    message: 'Internal Server Error',
-    details: 'Something went wrong on the server. Please try again later.',
-    error: err.message || 'Unknown error',
-  });
-};
-
-app.use(errorHandler);
-
-// Use the routes
 app.use('/auth', authRoutes);
 app.use('/posts', postRoutes);
+
+app.use('/posts', (req, res) => {
+  res.status(405).json({ message: 'Method Not Allowed' });
+});
+
+if (typeof User.associate === 'function') {
+  User.associate();
+}
+if (typeof Post.associate === 'function') {
+  Post.associate();
+}
+if (typeof Like.associate === 'function') {
+  Like.associate();
+}
 
 sequelize.sync()
   .then(() => {
@@ -53,3 +61,16 @@ sequelize.sync()
     logError('Error syncing database');
     console.error(err);
   });
+
+interface CustomError {
+  message: string;
+}
+
+interface Request extends express.Request {}
+interface Response extends express.Response {}
+interface NextFunction extends express.NextFunction {}
+
+app.use((err: CustomError, req: Request, res: Response, next: NextFunction) => {
+  logError(err.message);
+  res.status(500).json({ error: err.message });
+});

@@ -15,7 +15,6 @@ const loginLimiter = rateLimit({
     "Too many login attempts from this IP, please try again after 15 minutes",
 });
 
-// Strong password validation function
 const isStrongPassword = (password: string) => {
   return validator.isStrongPassword(password, {
     minLength: 8,

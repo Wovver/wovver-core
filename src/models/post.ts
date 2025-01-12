@@ -1,7 +1,7 @@
-// models/post.ts
 import { Model, DataTypes } from 'sequelize';
 import sequelize from '../config/database';
 import User from './user';
+import Like from './like';
 
 class Post extends Model {
   public id!: number;
@@ -9,8 +9,8 @@ class Post extends Model {
   public content!: string;
 
   public static associate() {
-    // Define the relationship between Post and User
     Post.belongsTo(User, { foreignKey: 'userId' });
+    Post.hasMany(Like, { foreignKey: 'postId' });
   }
 }
 
