@@ -9,8 +9,18 @@
     "outDir": "./dist",
     "rootDir": "./src",
     "strict": true,
-    "types": ["node", "express"]
+    "types": ["node", "express"],  // Make sure 'express' types are included
+    "typeRoots": ["./node_modules/@types", "./@types"],  // Ensure correct path to custom types
+    "lib": ["es2017", "esnext.asynciterable"],
+    "allowJs": false,
+    "resolveJsonModule": true,
+    "noImplicitAny": true
   },
-  "include": ["src/**/*.ts", "src/types/**/*.d.ts"],
-  "exclude": ["node_modules"]
+  "include": [
+    "src/**/*.ts",
+    "@types/**/*.d.ts"  // Ensure custom types are included here
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

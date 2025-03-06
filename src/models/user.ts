@@ -10,6 +10,10 @@ class User extends Model {
   public email!: string;
   public password!: string;
   public flags!: number;
+  public bio!: string | null;
+  public followers?: User[];
+  public following?: User[];
+  public displayName!: string | null;
 
   public static async hashPassword(password: string): Promise<string> {
     const saltRounds = 10;
@@ -30,6 +34,10 @@ class User extends Model {
 
   public removeFlag(flag: number): void {
     this.flags &= ~flag;
+  }
+
+  public getDisplayName(): string {
+    return this.displayName || this.username;
   }
 
   public static associate() {
@@ -62,11 +70,32 @@ User.init({
     allowNull: false,
     defaultValue: 0,
   },
+  bio: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
+  displayName: {
+    type: DataTypes.STRING,
+    allowNull: true,
+    field: 'display_name'
+  },
 }, {
   sequelize,
   modelName: 'User',
   tableName: 'users',
   timestamps: true,
+});
+
+User.belongsToMany(User, {
+  through: 'follows',
+  as: 'followers',
+  foreignKey: 'followingId',
+});
+
+User.belongsToMany(User, {
+  through: 'follows',
+  as: 'following',
+  foreignKey: 'followerId',
 });
 
 export default User;

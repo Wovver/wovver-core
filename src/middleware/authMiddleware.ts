@@ -1,9 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
-interface CustomRequest extends Request {
+// Create an extended Request interface to include the 'user' property
+export interface CustomRequest extends Request {
   user?: { userId: string };
 }
+
 
 export const authenticateJWT = async (req: CustomRequest, res: Response, next: NextFunction): Promise<void> => {
   const token = req.header('Authorization')?.split(' ')[1];
@@ -22,3 +24,4 @@ export const authenticateJWT = async (req: CustomRequest, res: Response, next: N
     return;
   }
 };
+

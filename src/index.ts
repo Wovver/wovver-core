@@ -3,6 +3,8 @@ import cors, { CorsOptions } from 'cors';
 import sequelize from './config/database';
 import authRoutes from './routes/v1/auth';
 import postRoutes from './routes/v1/post';
+import userRoutes from './routes/v1/user';
+import settingsRoutes from './routes/v1/settings';
 import { logInfo, logWarn, logError, logSuccess } from './utils/logger';
 import User from './models/user';
 import Post from './models/post';
@@ -11,6 +13,7 @@ import Like from './models/like';
 const app = express();
 
 const allowedOrigins = ['http://localhost:8081', 'http://localhost:3000', 'http://localhost:3050'];
+const PORT = process.env.PORT || 8091;
 
 const corsOptions: CorsOptions = {
   origin: (origin: string | undefined, callback: (err: Error | null, allow: boolean) => void) => {
@@ -24,7 +27,12 @@ const corsOptions: CorsOptions = {
   allowedHeaders: ['Content-Type', 'Authorization'],
 };
 
-app.use(cors(corsOptions));
+app.use(cors({
+  origin: 'http://localhost:3000',
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
 
 app.use(express.json());
 
@@ -33,8 +41,14 @@ app.use((req, res, next) => {
   next();
 });
 
+app.get('/', (req, res) => {
+  res.json({ message: 'v1 is /v1/:route' });
+});
+
 app.use('/auth', authRoutes);
 app.use('/posts', postRoutes);
+app.use('/user', userRoutes);
+app.use('/settings', settingsRoutes);
 
 app.use('/posts', (req, res) => {
   res.status(405).json({ message: 'Method Not Allowed' });
@@ -53,8 +67,8 @@ if (typeof Like.associate === 'function') {
 sequelize.sync()
   .then(() => {
     logSuccess('Database synced');
-    app.listen(8080, () => {
-      logSuccess('Server running on http://localhost:8080');
+    app.listen(PORT, () => {
+      logSuccess(`Server running on http://localhost:${PORT}`);
     });
   })
   .catch((err) => {
